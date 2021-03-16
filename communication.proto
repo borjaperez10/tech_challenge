@@ -1,0 +1,17 @@
+syntax = "proto3";
+package communication;
+
+message Message {
+  string body = 1;
+}
+
+message Invoice {
+  string companyID = 1;
+  double price = 2;
+}
+
+
+
+service CommunicationService {
+  rpc SellInvoice(Invoice) returns (Message) {}
+}

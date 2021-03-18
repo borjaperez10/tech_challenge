@@ -4,14 +4,50 @@ package communication;
 message Message {
   string body = 1;
 }
+message EmptyRequest {}
 
 message Invoice {
-  string companyID = 1;
-  double price = 2;
+  int32 id = 1;
+  string companyID = 2;
+  string invoiceName = 3;
+  double totalPrice = 4;
+  double amountToReceive = 5;
+  string closed = 6;
+}
+message Issuer {
+  string nif = 1;
+  string name = 2;
+}
+message Bid {
+  string dni = 1;
+  double total = 2;
+  double amount = 3;
+  string action = 4;
+}
+
+message Investor {
+  string dni = 1;
+  string name = 2;
+  double availableMoney=3;
+  double retainedMoney=4;
+}
+message InvoicePart {
+  int32 originalId = 1;
+  string namePart = 2;
+  double total = 3;
+  double amount = 4;
+  string buyer=5;
+  string seller=6;
 }
 
 
 
 service CommunicationService {
+  rpc CheckConnectivity(EmptyRequest) returns (EmptyRequest) {}
+  rpc IntroduceIssuerToDatabase(Issuer) returns (Message) {}
+  rpc IntroduceInvestorToDatabase(Investor) returns (Message) {}
   rpc SellInvoice(Invoice) returns (Message) {}
+  rpc TryToModifyInvestorMoney(Bid) returns (Message) {}
+  rpc TryToCreateInvoicePart(InvoicePart) returns (Message) {}
+  rpc GetAvailableInvoices(EmptyRequest) returns (stream Invoice) {}
 }

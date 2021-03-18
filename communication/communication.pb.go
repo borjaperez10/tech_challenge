@@ -62,9 +62,43 @@ func (m *Message) GetBody() string {
 	return ""
 }
 
+type EmptyRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *EmptyRequest) Reset()         { *m = EmptyRequest{} }
+func (m *EmptyRequest) String() string { return proto.CompactTextString(m) }
+func (*EmptyRequest) ProtoMessage()    {}
+func (*EmptyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b64068f22c460ac1, []int{1}
+}
+func (m *EmptyRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EmptyRequest.Unmarshal(m, b)
+}
+func (m *EmptyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EmptyRequest.Marshal(b, m, deterministic)
+}
+func (m *EmptyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EmptyRequest.Merge(m, src)
+}
+func (m *EmptyRequest) XXX_Size() int {
+	return xxx_messageInfo_EmptyRequest.Size(m)
+}
+func (m *EmptyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_EmptyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EmptyRequest proto.InternalMessageInfo
+
 type Invoice struct {
-	CompanyID            string   `protobuf:"bytes,1,opt,name=companyID,proto3" json:"companyID,omitempty"`
-	Price                float64  `protobuf:"fixed64,2,opt,name=price,proto3" json:"price,omitempty"`
+	Id                   int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	CompanyID            string   `protobuf:"bytes,2,opt,name=companyID,proto3" json:"companyID,omitempty"`
+	InvoiceName          string   `protobuf:"bytes,3,opt,name=invoiceName,proto3" json:"invoiceName,omitempty"`
+	TotalPrice           float64  `protobuf:"fixed64,4,opt,name=totalPrice,proto3" json:"totalPrice,omitempty"`
+	AmountToReceive      float64  `protobuf:"fixed64,5,opt,name=amountToReceive,proto3" json:"amountToReceive,omitempty"`
+	Closed               string   `protobuf:"bytes,6,opt,name=closed,proto3" json:"closed,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -74,7 +108,7 @@ func (m *Invoice) Reset()         { *m = Invoice{} }
 func (m *Invoice) String() string { return proto.CompactTextString(m) }
 func (*Invoice) ProtoMessage()    {}
 func (*Invoice) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b64068f22c460ac1, []int{1}
+	return fileDescriptor_b64068f22c460ac1, []int{2}
 }
 func (m *Invoice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Invoice.Unmarshal(m, b)
@@ -94,6 +128,13 @@ func (m *Invoice) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Invoice proto.InternalMessageInfo
 
+func (m *Invoice) GetId() int32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
 func (m *Invoice) GetCompanyID() string {
 	if m != nil {
 		return m.CompanyID
@@ -101,33 +142,332 @@ func (m *Invoice) GetCompanyID() string {
 	return ""
 }
 
-func (m *Invoice) GetPrice() float64 {
+func (m *Invoice) GetInvoiceName() string {
 	if m != nil {
-		return m.Price
+		return m.InvoiceName
+	}
+	return ""
+}
+
+func (m *Invoice) GetTotalPrice() float64 {
+	if m != nil {
+		return m.TotalPrice
 	}
 	return 0
 }
 
+func (m *Invoice) GetAmountToReceive() float64 {
+	if m != nil {
+		return m.AmountToReceive
+	}
+	return 0
+}
+
+func (m *Invoice) GetClosed() string {
+	if m != nil {
+		return m.Closed
+	}
+	return ""
+}
+
+type Issuer struct {
+	Nif                  string   `protobuf:"bytes,1,opt,name=nif,proto3" json:"nif,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Issuer) Reset()         { *m = Issuer{} }
+func (m *Issuer) String() string { return proto.CompactTextString(m) }
+func (*Issuer) ProtoMessage()    {}
+func (*Issuer) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b64068f22c460ac1, []int{3}
+}
+func (m *Issuer) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Issuer.Unmarshal(m, b)
+}
+func (m *Issuer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Issuer.Marshal(b, m, deterministic)
+}
+func (m *Issuer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Issuer.Merge(m, src)
+}
+func (m *Issuer) XXX_Size() int {
+	return xxx_messageInfo_Issuer.Size(m)
+}
+func (m *Issuer) XXX_DiscardUnknown() {
+	xxx_messageInfo_Issuer.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Issuer proto.InternalMessageInfo
+
+func (m *Issuer) GetNif() string {
+	if m != nil {
+		return m.Nif
+	}
+	return ""
+}
+
+func (m *Issuer) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type Bid struct {
+	Dni                  string   `protobuf:"bytes,1,opt,name=dni,proto3" json:"dni,omitempty"`
+	Total                float64  `protobuf:"fixed64,2,opt,name=total,proto3" json:"total,omitempty"`
+	Amount               float64  `protobuf:"fixed64,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	Action               string   `protobuf:"bytes,4,opt,name=action,proto3" json:"action,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Bid) Reset()         { *m = Bid{} }
+func (m *Bid) String() string { return proto.CompactTextString(m) }
+func (*Bid) ProtoMessage()    {}
+func (*Bid) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b64068f22c460ac1, []int{4}
+}
+func (m *Bid) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Bid.Unmarshal(m, b)
+}
+func (m *Bid) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Bid.Marshal(b, m, deterministic)
+}
+func (m *Bid) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Bid.Merge(m, src)
+}
+func (m *Bid) XXX_Size() int {
+	return xxx_messageInfo_Bid.Size(m)
+}
+func (m *Bid) XXX_DiscardUnknown() {
+	xxx_messageInfo_Bid.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Bid proto.InternalMessageInfo
+
+func (m *Bid) GetDni() string {
+	if m != nil {
+		return m.Dni
+	}
+	return ""
+}
+
+func (m *Bid) GetTotal() float64 {
+	if m != nil {
+		return m.Total
+	}
+	return 0
+}
+
+func (m *Bid) GetAmount() float64 {
+	if m != nil {
+		return m.Amount
+	}
+	return 0
+}
+
+func (m *Bid) GetAction() string {
+	if m != nil {
+		return m.Action
+	}
+	return ""
+}
+
+type Investor struct {
+	Dni                  string   `protobuf:"bytes,1,opt,name=dni,proto3" json:"dni,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	AvailableMoney       float64  `protobuf:"fixed64,3,opt,name=availableMoney,proto3" json:"availableMoney,omitempty"`
+	RetainedMoney        float64  `protobuf:"fixed64,4,opt,name=retainedMoney,proto3" json:"retainedMoney,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Investor) Reset()         { *m = Investor{} }
+func (m *Investor) String() string { return proto.CompactTextString(m) }
+func (*Investor) ProtoMessage()    {}
+func (*Investor) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b64068f22c460ac1, []int{5}
+}
+func (m *Investor) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Investor.Unmarshal(m, b)
+}
+func (m *Investor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Investor.Marshal(b, m, deterministic)
+}
+func (m *Investor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Investor.Merge(m, src)
+}
+func (m *Investor) XXX_Size() int {
+	return xxx_messageInfo_Investor.Size(m)
+}
+func (m *Investor) XXX_DiscardUnknown() {
+	xxx_messageInfo_Investor.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Investor proto.InternalMessageInfo
+
+func (m *Investor) GetDni() string {
+	if m != nil {
+		return m.Dni
+	}
+	return ""
+}
+
+func (m *Investor) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Investor) GetAvailableMoney() float64 {
+	if m != nil {
+		return m.AvailableMoney
+	}
+	return 0
+}
+
+func (m *Investor) GetRetainedMoney() float64 {
+	if m != nil {
+		return m.RetainedMoney
+	}
+	return 0
+}
+
+type InvoicePart struct {
+	OriginalId           int32    `protobuf:"varint,1,opt,name=originalId,proto3" json:"originalId,omitempty"`
+	NamePart             string   `protobuf:"bytes,2,opt,name=namePart,proto3" json:"namePart,omitempty"`
+	Total                float64  `protobuf:"fixed64,3,opt,name=total,proto3" json:"total,omitempty"`
+	Amount               float64  `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Buyer                string   `protobuf:"bytes,5,opt,name=buyer,proto3" json:"buyer,omitempty"`
+	Seller               string   `protobuf:"bytes,6,opt,name=seller,proto3" json:"seller,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *InvoicePart) Reset()         { *m = InvoicePart{} }
+func (m *InvoicePart) String() string { return proto.CompactTextString(m) }
+func (*InvoicePart) ProtoMessage()    {}
+func (*InvoicePart) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b64068f22c460ac1, []int{6}
+}
+func (m *InvoicePart) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InvoicePart.Unmarshal(m, b)
+}
+func (m *InvoicePart) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InvoicePart.Marshal(b, m, deterministic)
+}
+func (m *InvoicePart) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InvoicePart.Merge(m, src)
+}
+func (m *InvoicePart) XXX_Size() int {
+	return xxx_messageInfo_InvoicePart.Size(m)
+}
+func (m *InvoicePart) XXX_DiscardUnknown() {
+	xxx_messageInfo_InvoicePart.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InvoicePart proto.InternalMessageInfo
+
+func (m *InvoicePart) GetOriginalId() int32 {
+	if m != nil {
+		return m.OriginalId
+	}
+	return 0
+}
+
+func (m *InvoicePart) GetNamePart() string {
+	if m != nil {
+		return m.NamePart
+	}
+	return ""
+}
+
+func (m *InvoicePart) GetTotal() float64 {
+	if m != nil {
+		return m.Total
+	}
+	return 0
+}
+
+func (m *InvoicePart) GetAmount() float64 {
+	if m != nil {
+		return m.Amount
+	}
+	return 0
+}
+
+func (m *InvoicePart) GetBuyer() string {
+	if m != nil {
+		return m.Buyer
+	}
+	return ""
+}
+
+func (m *InvoicePart) GetSeller() string {
+	if m != nil {
+		return m.Seller
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Message)(nil), "communication.Message")
+	proto.RegisterType((*EmptyRequest)(nil), "communication.EmptyRequest")
 	proto.RegisterType((*Invoice)(nil), "communication.Invoice")
+	proto.RegisterType((*Issuer)(nil), "communication.Issuer")
+	proto.RegisterType((*Bid)(nil), "communication.Bid")
+	proto.RegisterType((*Investor)(nil), "communication.Investor")
+	proto.RegisterType((*InvoicePart)(nil), "communication.InvoicePart")
 }
 
 func init() { proto.RegisterFile("communication.proto", fileDescriptor_b64068f22c460ac1) }
 
 var fileDescriptor_b64068f22c460ac1 = []byte{
-	// 164 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4e, 0xce, 0xcf, 0xcd,
-	0x2d, 0xcd, 0xcb, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
-	0xe2, 0x45, 0x11, 0x54, 0x92, 0xe5, 0x62, 0xf7, 0x4d, 0x2d, 0x2e, 0x4e, 0x4c, 0x4f, 0x15, 0x12,
-	0xe2, 0x62, 0x49, 0xca, 0x4f, 0xa9, 0x94, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x02, 0xb3, 0x95,
-	0x6c, 0xb9, 0xd8, 0x3d, 0xf3, 0xca, 0xf2, 0x33, 0x93, 0x53, 0x85, 0x64, 0xb8, 0x38, 0x93, 0xf3,
-	0x73, 0x0b, 0x12, 0xf3, 0x2a, 0x3d, 0x5d, 0xa0, 0x6a, 0x10, 0x02, 0x42, 0x22, 0x5c, 0xac, 0x05,
-	0x45, 0x99, 0xc9, 0xa9, 0x12, 0x4c, 0x0a, 0x8c, 0x1a, 0x8c, 0x41, 0x10, 0x8e, 0x51, 0x38, 0x97,
-	0x88, 0x33, 0xb2, 0x75, 0xc1, 0xa9, 0x45, 0x65, 0x20, 0xb3, 0xec, 0xb9, 0xb8, 0x83, 0x53, 0x73,
-	0x72, 0x60, 0x46, 0x8b, 0xe9, 0xa1, 0xba, 0x14, 0x2a, 0x2e, 0x85, 0x2e, 0x0e, 0x75, 0xa9, 0x12,
-	0x43, 0x12, 0x1b, 0xd8, 0x33, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x12, 0xa9, 0x24, 0x99,
-	0xe3, 0x00, 0x00, 0x00,
+	// 563 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x54, 0xcb, 0x8e, 0xd3, 0x30,
+	0x14, 0x6d, 0xfa, 0x9a, 0xe9, 0x2d, 0x53, 0xc0, 0x94, 0x12, 0x3a, 0x80, 0xaa, 0x08, 0xa1, 0xae,
+	0x2a, 0x04, 0x1f, 0x80, 0x98, 0x0e, 0x82, 0x48, 0x74, 0xa6, 0xca, 0x74, 0xcb, 0xc2, 0x4d, 0xee,
+	0x0c, 0x16, 0x89, 0x5d, 0x1c, 0x27, 0x52, 0x36, 0xfc, 0x0d, 0x5f, 0xc0, 0x92, 0x9f, 0x43, 0x76,
+	0x12, 0x9a, 0x86, 0x92, 0x9d, 0xef, 0xf1, 0xf1, 0xb9, 0xaf, 0x93, 0xc0, 0x23, 0x5f, 0x44, 0x51,
+	0xc2, 0x99, 0x4f, 0x15, 0x13, 0x7c, 0xb1, 0x93, 0x42, 0x09, 0x72, 0x76, 0x00, 0x3a, 0xcf, 0xe1,
+	0x64, 0x85, 0x71, 0x4c, 0xef, 0x90, 0x10, 0xe8, 0x6e, 0x45, 0x90, 0xd9, 0xd6, 0xcc, 0x9a, 0x0f,
+	0x3c, 0x73, 0x76, 0x46, 0x70, 0xef, 0x43, 0xb4, 0x53, 0x99, 0x87, 0xdf, 0x13, 0x8c, 0x95, 0xf3,
+	0xdb, 0x82, 0x13, 0x97, 0xa7, 0x82, 0xf9, 0x48, 0x46, 0xd0, 0x66, 0x81, 0x61, 0xf7, 0xbc, 0x36,
+	0x0b, 0xc8, 0x33, 0x18, 0xf8, 0x22, 0xda, 0x51, 0x9e, 0xb9, 0x97, 0x76, 0xdb, 0x88, 0xec, 0x01,
+	0x32, 0x83, 0x21, 0xcb, 0x1f, 0x5e, 0xd1, 0x08, 0xed, 0x8e, 0xb9, 0xaf, 0x42, 0xe4, 0x05, 0x80,
+	0x12, 0x8a, 0x86, 0x6b, 0xc9, 0x7c, 0xb4, 0xbb, 0x33, 0x6b, 0x6e, 0x79, 0x15, 0x84, 0xcc, 0xe1,
+	0x3e, 0x8d, 0x44, 0xc2, 0xd5, 0x46, 0x78, 0xe8, 0x23, 0x4b, 0xd1, 0xee, 0x19, 0x52, 0x1d, 0x26,
+	0x13, 0xe8, 0xfb, 0xa1, 0x88, 0x31, 0xb0, 0xfb, 0x26, 0x4d, 0x11, 0x39, 0x0b, 0xe8, 0xbb, 0x71,
+	0x9c, 0xa0, 0x24, 0x0f, 0xa0, 0xc3, 0xd9, 0x6d, 0xd1, 0xaa, 0x3e, 0xea, 0xee, 0xb9, 0x2e, 0x2c,
+	0x2f, 0xdc, 0x9c, 0x9d, 0x2f, 0xd0, 0xb9, 0x60, 0x81, 0x26, 0x07, 0x9c, 0x95, 0xe4, 0x80, 0x33,
+	0x32, 0x86, 0x9e, 0x29, 0xcc, 0xb0, 0x2d, 0x2f, 0x0f, 0x74, 0xda, 0xbc, 0x12, 0xd3, 0x9d, 0xe5,
+	0x15, 0x91, 0xc1, 0x7d, 0x3d, 0x6d, 0xd3, 0xd4, 0xc0, 0x2b, 0x22, 0xe7, 0x07, 0x9c, 0xba, 0x3c,
+	0xc5, 0x58, 0x09, 0x79, 0x24, 0xc7, 0x91, 0x82, 0xc8, 0x2b, 0x18, 0xd1, 0x94, 0xb2, 0x90, 0x6e,
+	0x43, 0x5c, 0x09, 0x8e, 0x59, 0x91, 0xa9, 0x86, 0x92, 0x97, 0x70, 0x26, 0x51, 0x51, 0xc6, 0x31,
+	0xc8, 0x69, 0xf9, 0x34, 0x0f, 0x41, 0xe7, 0xa7, 0x05, 0xc3, 0x62, 0x99, 0x6b, 0x2a, 0x95, 0x5e,
+	0x80, 0x90, 0xec, 0x8e, 0x71, 0x1a, 0xba, 0xe5, 0x62, 0x2b, 0x08, 0x99, 0xc2, 0xa9, 0xae, 0x42,
+	0x73, 0x8b, 0xaa, 0xfe, 0xc6, 0xfb, 0x89, 0x74, 0x8e, 0x4f, 0xa4, 0x7b, 0x30, 0x91, 0x31, 0xf4,
+	0xb6, 0x49, 0x86, 0xd2, 0x2c, 0x70, 0xe0, 0xe5, 0x81, 0x66, 0xc7, 0x18, 0x86, 0x28, 0xcb, 0xb5,
+	0xe5, 0xd1, 0x9b, 0x5f, 0x5d, 0x18, 0x2f, 0xab, 0xae, 0xbd, 0x41, 0x99, 0x6a, 0x47, 0x5c, 0xc3,
+	0xc3, 0xe5, 0x57, 0xf4, 0xbf, 0x2d, 0x05, 0xe7, 0xe8, 0x2b, 0x96, 0x32, 0x95, 0x91, 0xf3, 0xc5,
+	0xa1, 0xed, 0xab, 0xfe, 0x9d, 0x36, 0x5d, 0x3a, 0x2d, 0xf2, 0x19, 0x9e, 0xba, 0x5c, 0x49, 0x11,
+	0x24, 0x3e, 0xe6, 0x4e, 0xd9, 0x88, 0x4b, 0xaa, 0xe8, 0x96, 0xc6, 0x48, 0x1e, 0xd7, 0xde, 0xe6,
+	0x84, 0xe9, 0xa4, 0x06, 0x17, 0x9f, 0x93, 0xd3, 0x22, 0x6b, 0x38, 0xdf, 0xab, 0x15, 0x8b, 0xae,
+	0xe8, 0x3d, 0xa9, 0xeb, 0x15, 0x94, 0x06, 0xc5, 0x77, 0x30, 0xbc, 0xc1, 0x30, 0x2c, 0xbf, 0xc0,
+	0xc9, 0xbf, 0x0a, 0x1a, 0x6f, 0x10, 0xf8, 0x04, 0xf6, 0x46, 0x66, 0x1b, 0xb1, 0x12, 0x01, 0xbb,
+	0xcd, 0xca, 0x8c, 0xb9, 0x69, 0x48, 0xed, 0xd5, 0x05, 0x0b, 0x1a, 0x94, 0xae, 0x60, 0x62, 0x94,
+	0x96, 0x12, 0xa9, 0xc2, 0xaa, 0x8d, 0xa6, 0xc7, 0xab, 0xd2, 0x77, 0x0d, 0x7a, 0xd7, 0x30, 0xfe,
+	0x88, 0xea, 0x7d, 0xe9, 0xe3, 0xe2, 0x51, 0xdc, 0xbc, 0xce, 0xff, 0x0c, 0xc0, 0x69, 0xbd, 0xb6,
+	0xb6, 0x7d, 0xf3, 0xbf, 0x7b, 0xfb, 0x27, 0x00, 0x00, 0xff, 0xff, 0xfb, 0x89, 0x74, 0x81, 0x06,
+	0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -142,7 +482,13 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type CommunicationServiceClient interface {
+	CheckConnectivity(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyRequest, error)
+	IntroduceIssuerToDatabase(ctx context.Context, in *Issuer, opts ...grpc.CallOption) (*Message, error)
+	IntroduceInvestorToDatabase(ctx context.Context, in *Investor, opts ...grpc.CallOption) (*Message, error)
 	SellInvoice(ctx context.Context, in *Invoice, opts ...grpc.CallOption) (*Message, error)
+	TryToModifyInvestorMoney(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*Message, error)
+	TryToCreateInvoicePart(ctx context.Context, in *InvoicePart, opts ...grpc.CallOption) (*Message, error)
+	GetAvailableInvoices(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (CommunicationService_GetAvailableInvoicesClient, error)
 }
 
 type communicationServiceClient struct {
@@ -151,6 +497,33 @@ type communicationServiceClient struct {
 
 func NewCommunicationServiceClient(cc *grpc.ClientConn) CommunicationServiceClient {
 	return &communicationServiceClient{cc}
+}
+
+func (c *communicationServiceClient) CheckConnectivity(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyRequest, error) {
+	out := new(EmptyRequest)
+	err := c.cc.Invoke(ctx, "/communication.CommunicationService/CheckConnectivity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *communicationServiceClient) IntroduceIssuerToDatabase(ctx context.Context, in *Issuer, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/communication.CommunicationService/IntroduceIssuerToDatabase", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *communicationServiceClient) IntroduceInvestorToDatabase(ctx context.Context, in *Investor, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/communication.CommunicationService/IntroduceInvestorToDatabase", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *communicationServiceClient) SellInvoice(ctx context.Context, in *Invoice, opts ...grpc.CallOption) (*Message, error) {
@@ -162,21 +535,149 @@ func (c *communicationServiceClient) SellInvoice(ctx context.Context, in *Invoic
 	return out, nil
 }
 
+func (c *communicationServiceClient) TryToModifyInvestorMoney(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/communication.CommunicationService/TryToModifyInvestorMoney", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *communicationServiceClient) TryToCreateInvoicePart(ctx context.Context, in *InvoicePart, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/communication.CommunicationService/TryToCreateInvoicePart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *communicationServiceClient) GetAvailableInvoices(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (CommunicationService_GetAvailableInvoicesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_CommunicationService_serviceDesc.Streams[0], "/communication.CommunicationService/GetAvailableInvoices", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &communicationServiceGetAvailableInvoicesClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type CommunicationService_GetAvailableInvoicesClient interface {
+	Recv() (*Invoice, error)
+	grpc.ClientStream
+}
+
+type communicationServiceGetAvailableInvoicesClient struct {
+	grpc.ClientStream
+}
+
+func (x *communicationServiceGetAvailableInvoicesClient) Recv() (*Invoice, error) {
+	m := new(Invoice)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CommunicationServiceServer is the server API for CommunicationService service.
 type CommunicationServiceServer interface {
+	CheckConnectivity(context.Context, *EmptyRequest) (*EmptyRequest, error)
+	IntroduceIssuerToDatabase(context.Context, *Issuer) (*Message, error)
+	IntroduceInvestorToDatabase(context.Context, *Investor) (*Message, error)
 	SellInvoice(context.Context, *Invoice) (*Message, error)
+	TryToModifyInvestorMoney(context.Context, *Bid) (*Message, error)
+	TryToCreateInvoicePart(context.Context, *InvoicePart) (*Message, error)
+	GetAvailableInvoices(*EmptyRequest, CommunicationService_GetAvailableInvoicesServer) error
 }
 
 // UnimplementedCommunicationServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedCommunicationServiceServer struct {
 }
 
+func (*UnimplementedCommunicationServiceServer) CheckConnectivity(ctx context.Context, req *EmptyRequest) (*EmptyRequest, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckConnectivity not implemented")
+}
+func (*UnimplementedCommunicationServiceServer) IntroduceIssuerToDatabase(ctx context.Context, req *Issuer) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IntroduceIssuerToDatabase not implemented")
+}
+func (*UnimplementedCommunicationServiceServer) IntroduceInvestorToDatabase(ctx context.Context, req *Investor) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IntroduceInvestorToDatabase not implemented")
+}
 func (*UnimplementedCommunicationServiceServer) SellInvoice(ctx context.Context, req *Invoice) (*Message, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SellInvoice not implemented")
+}
+func (*UnimplementedCommunicationServiceServer) TryToModifyInvestorMoney(ctx context.Context, req *Bid) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TryToModifyInvestorMoney not implemented")
+}
+func (*UnimplementedCommunicationServiceServer) TryToCreateInvoicePart(ctx context.Context, req *InvoicePart) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TryToCreateInvoicePart not implemented")
+}
+func (*UnimplementedCommunicationServiceServer) GetAvailableInvoices(req *EmptyRequest, srv CommunicationService_GetAvailableInvoicesServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetAvailableInvoices not implemented")
 }
 
 func RegisterCommunicationServiceServer(s *grpc.Server, srv CommunicationServiceServer) {
 	s.RegisterService(&_CommunicationService_serviceDesc, srv)
+}
+
+func _CommunicationService_CheckConnectivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommunicationServiceServer).CheckConnectivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/communication.CommunicationService/CheckConnectivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommunicationServiceServer).CheckConnectivity(ctx, req.(*EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CommunicationService_IntroduceIssuerToDatabase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Issuer)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommunicationServiceServer).IntroduceIssuerToDatabase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/communication.CommunicationService/IntroduceIssuerToDatabase",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommunicationServiceServer).IntroduceIssuerToDatabase(ctx, req.(*Issuer))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CommunicationService_IntroduceInvestorToDatabase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Investor)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommunicationServiceServer).IntroduceInvestorToDatabase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/communication.CommunicationService/IntroduceInvestorToDatabase",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommunicationServiceServer).IntroduceInvestorToDatabase(ctx, req.(*Investor))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _CommunicationService_SellInvoice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -197,15 +698,98 @@ func _CommunicationService_SellInvoice_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CommunicationService_TryToModifyInvestorMoney_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Bid)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommunicationServiceServer).TryToModifyInvestorMoney(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/communication.CommunicationService/TryToModifyInvestorMoney",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommunicationServiceServer).TryToModifyInvestorMoney(ctx, req.(*Bid))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CommunicationService_TryToCreateInvoicePart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InvoicePart)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommunicationServiceServer).TryToCreateInvoicePart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/communication.CommunicationService/TryToCreateInvoicePart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommunicationServiceServer).TryToCreateInvoicePart(ctx, req.(*InvoicePart))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CommunicationService_GetAvailableInvoices_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(EmptyRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CommunicationServiceServer).GetAvailableInvoices(m, &communicationServiceGetAvailableInvoicesServer{stream})
+}
+
+type CommunicationService_GetAvailableInvoicesServer interface {
+	Send(*Invoice) error
+	grpc.ServerStream
+}
+
+type communicationServiceGetAvailableInvoicesServer struct {
+	grpc.ServerStream
+}
+
+func (x *communicationServiceGetAvailableInvoicesServer) Send(m *Invoice) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _CommunicationService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "communication.CommunicationService",
 	HandlerType: (*CommunicationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "CheckConnectivity",
+			Handler:    _CommunicationService_CheckConnectivity_Handler,
+		},
+		{
+			MethodName: "IntroduceIssuerToDatabase",
+			Handler:    _CommunicationService_IntroduceIssuerToDatabase_Handler,
+		},
+		{
+			MethodName: "IntroduceInvestorToDatabase",
+			Handler:    _CommunicationService_IntroduceInvestorToDatabase_Handler,
+		},
+		{
 			MethodName: "SellInvoice",
 			Handler:    _CommunicationService_SellInvoice_Handler,
 		},
+		{
+			MethodName: "TryToModifyInvestorMoney",
+			Handler:    _CommunicationService_TryToModifyInvestorMoney_Handler,
+		},
+		{
+			MethodName: "TryToCreateInvoicePart",
+			Handler:    _CommunicationService_TryToCreateInvoicePart_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetAvailableInvoices",
+			Handler:       _CommunicationService_GetAvailableInvoices_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "communication.proto",
 }

@@ -51,6 +51,12 @@ func main() {
 		_, err := c.SellInvoice(context.Background(), &communication.Invoice{CompanyID: companyNIF, InvoiceName: invoiceName, TotalPrice: total, AmountToReceive: amount})
 		checkError(err, handler)
 
+	case 3://Read market ledger
+
+		response, err := c.ReadMarketLedger(context.Background(), &communication.EmptyRequest{})
+		checkError(err, handler)
+		fmt.Println(response.Body)
+
 	default:
 		log.Fatal("Invalid option")
 	}
@@ -93,6 +99,7 @@ func menuChooseOption()(option int){
 		fmt.Println("Choose an option:")
 		fmt.Println("1.-Register an issuer in the database:")
 		fmt.Println("2.-Sell an invoice. This means that the issuer is already registered:")
+		fmt.Println("3.-Read the Market Ledger")
 		fmt.Println("**********************************************************************")
 		fmt.Scanln(&option)
 		return 

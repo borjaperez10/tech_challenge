@@ -134,7 +134,10 @@ func main() {
 
 			
 		}	
-
+	case 3://Read market ledger
+		response, err := c.ReadMarketLedger(context.Background(), &communication.EmptyRequest{})
+		checkError(err, handler)
+		fmt.Println(response.Body)
 	default:
 		log.Fatal("Invalid option")
 	}
@@ -185,6 +188,7 @@ func menuChooseOption()(option int){
 		fmt.Println("Choose an option:")
 		fmt.Println("1.-Register an inversor in the database:")
 		fmt.Println("2.-Place a bid over the available invoices. This means that the investor is already registered:")
+		fmt.Println("3.-Read the Market Ledger")
 		fmt.Println("**********************************************************************")
 		fmt.Scanln(&option)
 		return 

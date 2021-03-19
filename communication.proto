@@ -43,6 +43,7 @@ message InvoicePart {
 
 
 service CommunicationService {
+  rpc ReadMarketLedger(EmptyRequest) returns (Message) {}
   rpc CheckConnectivity(EmptyRequest) returns (EmptyRequest) {}
   rpc IntroduceIssuerToDatabase(Issuer) returns (Message) {}
   rpc IntroduceInvestorToDatabase(Investor) returns (Message) {}

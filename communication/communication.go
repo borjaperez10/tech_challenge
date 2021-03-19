@@ -7,12 +7,17 @@ import (
 	"github.com/jinzhu/gorm"
 	    "database/sql"
 	_ "github.com/lib/pq" 
+	"strings"
 	
 )
 
 
 type Server struct {
 }
+
+var ledgerLine string
+var ledgerText []string
+
 
 
 
@@ -35,6 +40,14 @@ func checkError(err error) {
     if err != nil {
         log.Fatal(err)
     }
+}
+
+func getLedger()(result []string){
+	result = ledgerText
+	return
+}
+func AppendLineToLedger(text string){
+	ledgerText = append(ledgerText, text)
 }
 
 // GetDB Returns a reference to the database
@@ -73,14 +86,16 @@ func (s *Server) SellInvoice(ctx context.Context, invoice *Invoice) (*Message, e
 	  returnMessage = "Issuer does not exist in the database. It must be added in order to sell an invoice."
 	case nil:
 		//Check that there is no any invoice with that same name name and company:
-		sqlStatement = `SELECT * FROM invoice WHERE name=$1 and issuer=$2;`
+		sqlStatement = `SELECT name, issuer FROM invoice WHERE name=$1 and issuer=$2;`
 		row := db.QueryRow(sqlStatement, invoice.InvoiceName, invoice.CompanyID)
 		err = row.Scan(&invoic.ID, &invoic.Issuer)
 		if err == sql.ErrNoRows{
 			insertStatement := `insert into "invoice"("name", "issuer", "total", "toreceive", "closed") values($1, $2, $3, $4, $5)`
 			_, err := db.Exec(insertStatement, invoice.InvoiceName, invoice.CompanyID, invoice.TotalPrice, invoice.AmountToReceive, "No")
 			checkError(err)
-			returnMessage = "Introduced in the database that issuer " + invoice.CompanyID + "sells an invoice " + invoice.InvoiceName + "of total value " +fmt.Sprintf("%f", invoice.TotalPrice) + " asking for " + fmt.Sprintf("%f", invoice.AmountToReceive)
+			returnMessage = "Issuer " +issNam + " has a $" + fmt.Sprintf("%f", invoice.TotalPrice) + " invoice " + invoice.InvoiceName + " that should be financed. Requests $" + fmt.Sprintf("%f", invoice.AmountToReceive)
+			AppendLineToLedger(returnMessage)
+
 		}else{
 			returnMessage = "There is an invoice in the database containing " + invoice.InvoiceName + " and " + invoice.CompanyID
 		}
@@ -94,7 +109,7 @@ func (s *Server) SellInvoice(ctx context.Context, invoice *Invoice) (*Message, e
 
 
 
-func ModifyBankAccount(db *sql.DB, dni_investor string, toModify float64, action string)(result bool){
+func ModifyBankAccount(db *sql.DB, dni_investor string, toModifyTotal float64, toModify float64, action string)(result bool){
 	//This function modifies the bank account quantity of the requested investor
 	//If the action is add, we will add the specified quantity to the total amount, and remove it from the retained money, as it means that it was a retained bid that must be returned.
 	//If the action is rm, we will remove the specified quantity to the total amount, and add it to the retained money, as it means that it was a bid that has been placed and money must be retained
@@ -102,21 +117,30 @@ func ModifyBankAccount(db *sql.DB, dni_investor string, toModify float64, action
 	// The function will return error, if the investor does not have enough money for the required operation
 	
 	var totalM, retainedM, newMoney, retMoney float64;
+	var nameInv string
 
-	//Check that there is no any invoice with that same name name and company:
-	sqlStatement := `SELECT total_money, retained_money FROM investor WHERE dni=$1;`
+	//Get investor name
+	sqlStatement := `SELECT name FROM investor WHERE dni=$1;`
 	row := db.QueryRow(sqlStatement, dni_investor)
+	err = row.Scan(&nameInv)
+	checkError(err)
+	
+	//Check that there is no any invoice with that same name name and company:
+	sqlStatement = `SELECT total_money, retained_money FROM investor WHERE dni=$1;`
+	row = db.QueryRow(sqlStatement, dni_investor)
 	err = row.Scan(&totalM, &retainedM)
 	checkError(err)
 
 	if action == "removeRet"{
 		retMoney = retainedM - toModify
 		updateStatement := `UPDATE investor SET retained_money=$1 WHERE dni=$2;`
+		t := float64(toModifyTotal - toModify)
+		AppendLineToLedger("The transaction of $" + fmt.Sprintf("%f", toModify) + " that " +nameInv + " had retained has been executed. " + nameInv+" will get a profit of $" +fmt.Sprintf("%f", t)  )
 		_, err := db.Exec(updateStatement, retMoney, dni_investor)
 		checkError(err)
 		result = true
 	}else{
-		if action == "add"{
+		if action == "add" || action == "closed"{
 			newMoney = totalM + toModify
 			retMoney = retainedM - toModify
 		}else if action == "rm"{
@@ -128,6 +152,11 @@ func ModifyBankAccount(db *sql.DB, dni_investor string, toModify float64, action
 			_, err := db.Exec(updateStatement,newMoney, retMoney, dni_investor)
 			checkError(err)
 			result = true
+			if action == "add"{
+				AppendLineToLedger("$" + fmt.Sprintf("%f", toModify) + " has been added to " +nameInv+ "'s bank account ")
+			}else if action == "rm"{
+				AppendLineToLedger(nameInv + " has placed a bid of $" + fmt.Sprintf("%f", toModifyTotal) + ". $" + fmt.Sprintf("%f", toModify) + "has been retained in his bank account ")
+			}
 		}else{
 			result = false
 		}
@@ -144,7 +173,7 @@ func (s *Server) TryToModifyInvestorMoney(ctx context.Context, bid *Bid) (*Messa
 	defer CloseDB(db);
 	checkError(err)
 
-	res:=ModifyBankAccount(db, bid.Dni, bid.Amount, bid.Action)
+	res:=ModifyBankAccount(db, bid.Dni, bid.Total, bid.Amount, bid.Action)
 	if res == true{
 		returnMessage="yes"
 	}else{
@@ -207,7 +236,8 @@ func matchingAlgorithm(db *sql.DB, idinvestor string, idissuer string, idInvoice
 
 	if discountBid > discountInvoice{
 		result = "1" //Means that bid has been rejected and money must be returned to the investor
-		ModifyBankAccount(db, idinvestor, amountBid , "add")
+		AppendLineToLedger("Last bid has been rejected.")
+		ModifyBankAccount(db, idinvestor, totalBid, amountBid , "add")
 
 	}else{		
 		sqlStatement := `SELECT total FROM part_invoice WHERE invoice_id=$1;`
@@ -235,7 +265,8 @@ func matchingAlgorithm(db *sql.DB, idinvestor string, idissuer string, idInvoice
 			insertStatement := `insert into "part_invoice"("invoice_id", "total", "amount", "buyer", "seller") values($1, $2, $3, $4, $5)`
 			_, err := db.Exec(insertStatement, idInvoice, newTotalBid, newAmountBid, idinvestor, idissuer)
 			checkError(err)
-			ModifyBankAccount(db, idinvestor, amountBid - newAmountBid , "add")
+			AppendLineToLedger("Bid has been adjusted to $" + fmt.Sprintf("%f", newTotalBid) + ". $" + fmt.Sprintf("%f", newAmountBid) + "has been retained in his bank account ")
+			ModifyBankAccount(db, idinvestor, totalBid - newTotalBid, amountBid - newAmountBid , "closed")
 
 			//Set bid as closed
 			updateStatement := `UPDATE invoice SET closed=$1 WHERE id=$2;`
@@ -268,7 +299,7 @@ func PayAndCreateDebts(db *sql.DB, idInvoice int32)(result bool){
     for rows.Next() {
         err := rows.Scan(&partid, &total, &amount, &buyer,  &seller)
 		checkError(err)
-		ModifyBankAccount(db, buyer, amount , "removeRet")
+		ModifyBankAccount(db, buyer, total, amount , "removeRet")
 
 		//Create debt
 		insertStatement := `insert into "debt"("invoice_part", "amount", "creditor", "debtor") values($1, $2, $3, $4)`
@@ -276,6 +307,7 @@ func PayAndCreateDebts(db *sql.DB, idInvoice int32)(result bool){
 		result = true
 		checkError(err)
     }
+
 	err = rows.Err()
 	checkError(err)
 	return 
@@ -308,6 +340,11 @@ func (s *Server) IntroduceInvestorToDatabase(ctx context.Context, message *Inves
 	_, err = db.Exec(insertStatement, message.Dni, message.Name, message.AvailableMoney, message.RetainedMoney)
 	checkError(err)
 	return &Message{Body: "Introduced in the database " + message.Name + " Investor with DNI " + message.Dni}, nil
+}
+func (s *Server) ReadMarketLedger(ctx context.Context, in *EmptyRequest) (*Message, error) {
+	result := getLedger()
+	stringRes := strings.Join(result,"\n")
+	return &Message{Body: stringRes}, nil
 }
 
 

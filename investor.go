@@ -216,7 +216,7 @@ func menuRegisterInvestor()(dni string, name string, money float64){
 		// Money in bank account
 		fmt.Println("Please, enter the DNI of the inversor to register")
 		fmt.Scanln(&dni)
-		fmt.Println("Please, enter the name of the issuer")
+		fmt.Println("Please, enter the name of the investor")
 		fmt.Scanln(&name)
 		fmt.Println("Please, enter the amount of money in your account. This will be added as available money")
 		fmt.Scanln(&money)

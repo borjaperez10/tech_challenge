@@ -17,7 +17,7 @@ func main() {
 	s := communication.Server{}
 
 	grpcServer := grpc.NewServer()
-
+	log.Println("Server Running listening on port 9000")
 	communication.RegisterCommunicationServiceServer(grpcServer, &s)
 
 	if err := grpcServer.Serve(lis); err != nil {

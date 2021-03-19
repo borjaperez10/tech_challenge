@@ -40,7 +40,7 @@ func checkError(err error) {
 // GetDB Returns a reference to the database
 func OpenDB() (*sql.DB, error) {
 	//Open database
-	psqlconn := fmt.Sprintf("host=localhost port=5432 user=postgres dbname=TechChallenge sslmode=disable password=borjius10")
+	psqlconn := fmt.Sprintf("host=localhost port=5432 user=challenge_user dbname=tech_challenge sslmode=disable password=1234")
     db, err := sql.Open("postgres", psqlconn)
     return db, err
 }

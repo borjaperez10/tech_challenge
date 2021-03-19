@@ -6,7 +6,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/borjaperez10/grpc_example1/communication"
+	"github.com/borjaperez10/tech_challenge/communication"
 	"strconv"
 
 	"io"

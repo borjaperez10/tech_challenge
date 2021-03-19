@@ -1,0 +1,58 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+
+version: '3.7'
+
+# Define services
+services:
+
+
+  
+  # App Service
+  server:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: Dockerfile
+ 
+    network_mode: 'host'
+
+  # App Service
+  issuer:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: Dockerfile_issuer
+    network_mode: 'host'
+    command: ./out/issuer
+
+  investor:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: Dockerfile_investor
+    network_mode: 'host'
+    command: ./out/investor
+
+      
+
+  database:
+    image: "postgres" # use latest official postgres version
+    env_file:
+      - ./sql/database.env # configure postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    network_mode: 'host'
+  
+volumes:
+  database-data: # named volumes can be managed easier using docker-compose
+  
+  
+
+  
+  
+  
+  
+  
+
+  

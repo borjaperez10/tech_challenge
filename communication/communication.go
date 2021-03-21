@@ -152,7 +152,7 @@ func ModifyBankAccount(db *sql.DB, dni_investor string, toModifyTotal float64, t
 			_, err := db.Exec(updateStatement,newMoney, retMoney, dni_investor)
 			checkError(err)
 			result = true
-			if action == "add"{
+			if action == "add"  || action == "closed"{
 				AppendLineToLedger("$" + fmt.Sprintf("%f", toModify) + " has been added to " +nameInv+ "'s bank account ")
 			}else if action == "rm"{
 				AppendLineToLedger(nameInv + " has placed a bid of $" + fmt.Sprintf("%f", toModifyTotal) + ". $" + fmt.Sprintf("%f", toModify) + "has been retained in his bank account ")
